@@ -28,6 +28,13 @@
             "context": 32768,
             "output": 8192
           }
+        },
+        "bge-m3:latest": {
+          "name": "BGE-M3 Embedding (local)",
+          "limit": {
+            "context": 8192,
+            "output": 8192
+          }
         }
       }
     }
