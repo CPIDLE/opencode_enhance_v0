@@ -7,7 +7,7 @@
 [OpenCode](https://github.com/sst/opencode) 是開源的 AI coding CLI，類似 Claude Code 但支援多種 LLM provider（Anthropic、Google、Ollama 等）。
 
 - GitHub: https://github.com/sst/opencode
-- 版本: v1.3.12
+- 版本: v1.3.13
 - 安裝方式: WinGet (`SST.opencode`)
 
 ## 今日工作目標

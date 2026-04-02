@@ -9,7 +9,7 @@
 ### 1. 專案 README 撰寫
 
 - **工作區**：Claude_code_leak_v0
-- **模型**：google/gemini-2.5-pro
+- **模型**：google/gemini-3.1-pro-preview
 - **任務**：掃描 src/ 目錄結構，撰寫 README.md（架構分析、技術棧、目錄說明）
 - **結果**：一次成功，產出品質高
 - **原因**：文件產生是 LLM 的強項，不涉及程式修改
@@ -17,7 +17,7 @@
 ### 2. Code Review（Calculator）
 
 - **工作區**：UR_Program_Analysis_v0
-- **模型**：google/gemini-2.5-pro
+- **模型**：google/gemini-3.1-pro-preview
 - **任務**：review test_code.md 中的 Python Calculator 程式碼
 - **結果**：成功找出潛在問題（chain 方法的 args 索引問題、statistics mode 邏輯）
 - **原因**：唯讀分析，不需修改程式碼
@@ -37,7 +37,7 @@
 ### 4. 多檔案重構（ur_script_parser.py）
 
 - **工作區**：UR_Program_Analysis_v0
-- **模型**：google/gemini-2.5-pro
+- **模型**：google/gemini-3.1-pro-preview
 - **任務**：在 ur_script_parser.py 新增 Statement dataclass 和 statements property
 - **失敗原因**：
   1. **IndentationError** — 空 class body 沒有 `pass`

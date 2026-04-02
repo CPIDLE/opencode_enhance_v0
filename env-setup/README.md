@@ -8,7 +8,7 @@
 
 ## OpenCode
 
-- 版本: v1.3.12
+- 版本: v1.3.13
 - 安裝方式: WinGet
   ```powershell
   winget install SST.opencode
@@ -78,7 +78,7 @@ docker exec -it ollama ollama pull bge-m3:latest
 
 ## API Keys
 
-- Gemini API Key（用於 `google/gemini-2.5-pro` 和 `google/gemini-2.5-flash`）
+- Gemini API Key（用於 `google/gemini-3.1-pro-preview` 和 `google/gemini-3.1-flash`）
 - 存放在各工作目錄的 `.env`，格式：
   ```
   GEMINI_API_KEY=...
