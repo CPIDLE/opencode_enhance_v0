@@ -1,47 +1,9 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "provider": {
-    "ollama": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama (local)",
-      "options": {
-        "baseURL": "http://localhost:11434/v1"
-      },
-      "models": {
-        "qwen2.5-coder:14b-instruct-q4_K_M": {
-          "name": "Qwen 2.5 Coder 14B (local)",
-          "limit": {
-            "context": 32768,
-            "output": 8192
-          }
-        },
-        "qwen25-coder-16k": {
-          "name": "Qwen 2.5 Coder 14B 16K (local)",
-          "limit": {
-            "context": 16384,
-            "output": 8192
-          }
-        },
-        "deepseek-r1:8b": {
-          "name": "DeepSeek R1 8B (local)",
-          "limit": {
-            "context": 32768,
-            "output": 8192
-          }
-        },
-        "bge-m3:latest": {
-          "name": "BGE-M3 Embedding (local)",
-          "limit": {
-            "context": 8192,
-            "output": 8192
-          }
-        }
-      }
-    }
-  },
-  "model": "google/gemini-2.5-pro",
+
+  "model": "google/gemini-3.1-pro-preview",
   "default_agent": "build",
-  "small_model": "google/gemini-2.5-flash",
+  "small_model": "google/gemini-3.1-flash",
   "permission": {
     "edit": {
       "~/.claude/**": "deny"
@@ -91,7 +53,12 @@
   "mcp": {
     "windows-mcp": {
       "type": "local",
-      "command": ["uvx", "windows-mcp"]
+      "command": ["C:\\Users\\benth\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\Scripts\\uvx.exe", "windows-mcp"]
+    },
+    "google-workspace": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "google-workspace-mcp", "serve"]
     }
   }
 }
