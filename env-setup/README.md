@@ -55,6 +55,29 @@
   GOOGLE_GENERATIVE_AI_API_KEY=...
   ```
 
+## 快速安裝指令
+
+```bash
+# 1. 安裝 OpenCode
+winget install SST.opencode
+
+# 2. 安裝 Ollama 模型
+ollama pull qwen2.5-coder:14b-instruct-q4_K_M
+ollama pull deepseek-r1:8b
+ollama pull bge-m3:latest
+
+# 3. 建立 16K context 自訂模型（可選）
+# 建立 Modelfile 內容: FROM qwen2.5-coder:14b-instruct-q4_K_M\nPARAMETER num_ctx 16384
+ollama create qwen25-coder-16k -f Modelfile
+
+# 4. 安裝 npm 依賴（在專案目錄）
+npm install @ai-sdk/openai-compatible
+
+# 5. 設定 API Key
+cp .env.example .env
+# 編輯 .env 填入 Gemini API Key
+```
+
 ## OpenCode 設定架構
 
 ```
