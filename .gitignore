@@ -1,0 +1,8 @@
+node_modules/
+.env
+*.zip
+clip.png
+__pycache__/
+.pytest_cache/
+bun.lock
+package-lock.json
