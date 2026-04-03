@@ -1,93 +1,199 @@
-# OpenCode MCP 設定經驗
+# OpenCode MCP 設定指南
 
 ## 什麼是 MCP
 
 MCP（Model Context Protocol）是一個開放協議，讓 AI 工具能與外部服務和系統整合。
 
-## OpenCode MCP 設定結構
+## 設定架構
+
+OpenCode 的 MCP 設定分為兩層：
+
+| 層級 | 路徑 | 用途 |
+|------|------|------|
+| 全域 | `~/.config/opencode/opencode.json` | 所有專案共用，預設關閉 |
+| 專案 | `<專案根目錄>/opencode.json` | 專案層級覆蓋，可啟用特定 MCP |
+
+### 設定格式（正確寫法）
 
 ```json
 {
   "mcp": {
     "<mcp-name>": {
-      "enabled": true | false,
-      "type": "local" | "stdio",
-      "command": "executable",
-      "args": ["arg1", "arg2"],
-      "env": {
-        "ENV_VAR": "value"
-      }
+      "type": "local",
+      "enabled": false,
+      "command": ["可執行檔", "參數1", "參數2"]
     }
   }
 }
 ```
 
-> **注意：** 部分較早的設定可能將 command 設為 Array (例如 `["uvx", "windows-mcp"]`)，或者環境變數鍵值使用 `environment` 而非 `env`。以實際運作成功的參數為準。
+> **重要限制（v1.3.13 驗證）：**
+> - `type` 只支援 `"local"`，不支援 `"stdio"`
+> - `command` 必須是陣列，不可用字串 + `args` 分開寫
+> - **不支援 `env` 欄位**（會導致 config validation 失敗）
+> - `enabled` 支援 `true`/`false`
 
-## 目前設定的 MCP (狀態：啟用且運作正常)
+---
 
-目前主要設定檔位於 `opencode-config/opencode.json`，以下為最新的穩定設定。
+## 全域設定（預設關閉）
 
-### 1. windows-mcp（已啟用）
-
-提供作業系統層級（檔案、系統管理、PowerShell）的控制權限。
-
-```json
-"windows-mcp": {
-  "enabled": true,
-  "type": "local",
-  "command": ["C:\\Users\\benth\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\Scripts\\uvx.exe", "windows-mcp"]
-}
-```
-
-- 使用 `uvx` 啟動 Windows MCP 伺服器
-- 使用絕對路徑指定 `uvx.exe` 的位置以避免路徑問題
-- 支援透過 PowerShell 執行命令與系統操作
-
-### 2. google-workspace（已啟用）
-
-整合 Gmail、Google Calendar、Docs、Drive、Sheets 等 Google 工作區服務。
+檔案：`~/.config/opencode/opencode.json`
 
 ```json
-"google-workspace": {
-  "enabled": true,
-  "type": "stdio",
-  "command": "npx",
-  "args": ["-y", "google-workspace-mcp", "serve"],
-  "env": {
-    "GOOGLE_MCP_ACCOUNTS_PATH": "C:\\Users\\benth\\.google-mcp\\accounts.json"
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "google/gemini-3.1-pro-preview",
+  "provider": {
+    "google": {
+      "options": {
+        "apiKey": "{env:GEMINI_API_KEY}"
+      },
+      "models": {
+        "gemini-3.1-pro-preview": {},
+        "gemini-3-flash-preview": {},
+        "gemini-2.5-pro": {},
+        "gemini-2.5-flash": {}
+      }
+    }
+  },
+  "mcp": {
+    "playwright": {
+      "type": "local",
+      "enabled": false,
+      "command": ["npx", "-y", "@playwright/mcp"]
+    },
+    "windows-mcp": {
+      "type": "local",
+      "enabled": false,
+      "command": ["<uvx.exe 絕對路徑>", "windows-mcp"]
+    },
+    "google-workspace": {
+      "type": "local",
+      "enabled": false,
+      "command": ["npx", "-y", "google-workspace-mcp", "serve"]
+    }
   }
 }
 ```
 
-- 使用 `stdio` 類型，以 `npx` 動態下載並執行
-- 使用 `args` 傳遞參數，而非將其併入 `command` 陣列
-- 使用 `env` 指定 `GOOGLE_MCP_ACCOUNTS_PATH` 環境變數
-- **必要前置作業：**
-  - 需要在 Google Cloud 建立憑證 (`credentials.json`)
-  - 需放置於 `~/.google-mcp/credentials.json`
-  - 使用指令新增帳號：`npx google-workspace-mcp accounts add <帳號名稱>`
+> `windows-mcp` 的 `uvx.exe` 路徑因電腦不同而異，需替換為實際路徑。
+> 查詢方式：`where uvx` 或 `Get-Command uvx`
 
-## 啟用與驗證流程
+## 專案層級啟用
 
-1. 在 `opencode.json` 中將 `enabled` 設為 `true`
-2. 確保執行檔 (如 `uvx.exe`, `npx`) 的路徑或系統全域環境變數設置正確
-3. 重新啟動 OpenCode
-4. 驗證方式：
-   - 詢問 Agent「MCP 運作正常嗎？」
-   - 對於 `windows-mcp`：可要求執行簡單的 PowerShell 測試命令 (例如 `Write-Output 'OK'`)
-   - 對於 `google-workspace`：可要求列出當前設定的帳戶
+在專案的 `opencode.json` 加入需要的 MCP 並設 `enabled: true`：
+
+```json
+{
+  "mcp": {
+    "windows-mcp": {
+      "type": "local",
+      "enabled": true,
+      "command": ["<uvx.exe 絕對路徑>", "windows-mcp"]
+    }
+  }
+}
+```
+
+---
+
+## 目前可用的 MCP
+
+### 1. playwright
+
+瀏覽器自動化（網頁操作、截圖、測試）。
+
+```
+npx -y @playwright/mcp
+```
+
+無需額外設定。
+
+### 2. windows-mcp
+
+作業系統層級控制（檔案、系統管理、PowerShell）。
+
+```
+uvx windows-mcp
+```
+
+前置安裝：
+```bash
+# 安裝 uv（如尚未安裝）
+pip install uv
+```
+
+### 3. google-workspace
+
+整合 Gmail、Calendar、Docs、Drive、Sheets 等 Google 服務。
+
+```
+npx -y google-workspace-mcp serve
+```
+
+#### 前置設定步驟
+
+1. **建立 Google Cloud OAuth 憑證**
+   - 前往 [Google Cloud Console](https://console.cloud.google.com/)
+   - 建立或選擇專案
+   - 啟用所需 API（Gmail API、Calendar API 等）
+   - 前往 **API 和服務** > **OAuth 同意畫面**：User Type 選「外部」，在「測試使用者」加入自己的 Email
+   - 前往 **API 和服務** > **憑證** > **建立憑證** > **OAuth 用戶端 ID**
+   - 類型選「電腦版應用程式」，建立後下載 JSON
+
+2. **放置憑證檔案**
+   ```powershell
+   mkdir -Force ~/.google-mcp
+   # 將下載的 JSON 複製並改名為 credentials.json
+   cp ~/Desktop/client_secret_*.json ~/.google-mcp/credentials.json
+   ```
+
+3. **新增帳號並授權**
+   ```bash
+   npx -y google-workspace-mcp accounts add <帳號名稱>
+   ```
+   瀏覽器會自動開啟，完成 Google 帳號授權即可。
+
+---
+
+## 新電腦快速設定
+
+```powershell
+# 1. 環境變數（加到系統或 .env）
+$env:GEMINI_API_KEY = "your_key"
+$env:GOOGLE_GENERATIVE_AI_API_KEY = "your_key"
+
+# 2. 安裝 opencode
+winget install SST.opencode
+
+# 3. 複製全域設定
+mkdir -Force ~/.config/opencode
+# 將本 repo 的 opencode-config/global-opencode.json 複製過去
+cp opencode-config/global-opencode.json ~/.config/opencode/opencode.json
+# 編輯 windows-mcp 的 uvx.exe 路徑（執行 where uvx 取得）
+
+# 4. Google Workspace 憑證（如需使用）
+mkdir -Force ~/.google-mcp
+# 放入 credentials.json（從 Google Cloud 下載）
+npx -y google-workspace-mcp accounts add <帳號名稱>
+
+# 5. 專案 .env
+cp opencode-config/.env.example .env
+# 編輯 .env 填入 API key
+```
 
 ## 常見問題
 
-| 問題 | 解法 |
-|------|------|
-| MCP 無法啟動 | 檢查 command 路徑是否正確，或嘗試使用絕對路徑 |
-| 參數或環境變數不吃 | 確認使用最新的鍵名 (`command`/`args`/`env` 組合) |
-| 認證失敗 | 確認 ~/.google-mcp/ 目錄下有正確的 `credentials.json` 與 `accounts.json` |
-| 權限不足 | 以系統管理員權限執行 OpenCode，或調整該資料夾的使用者權限 |
+| 問題 | 原因 | 解法 |
+|------|------|------|
+| `Invalid input mcp.<name>` | 使用了不支援的欄位（`env`、`args`、`type: "stdio"`） | 改用 `type: "local"` + `command` 陣列，移除 `env`/`args` |
+| opencode 無法啟動 | MCP config validation 失敗 | 檢查 JSON 格式和欄位名稱 |
+| google-workspace 認證失敗 | 缺少 credentials.json 或未授權 | 依前置設定步驟操作 |
+| uvx 找不到 | 路徑不對或未安裝 | `pip install uv` 後用 `where uvx` 確認路徑 |
 
 ## 相關檔案
 
-- 設定檔：`opencode.json` 或 `opencode-config/opencode.json`
-- Google Workspace 認證與帳戶：`~/.google-mcp/`
+- 全域設定範本：`opencode-config/global-opencode.json`
+- 專案設定範本：`opencode-config/opencode.json`
+- 環境變數範本：`opencode-config/.env.example`
+- Google 憑證目錄：`~/.google-mcp/`
