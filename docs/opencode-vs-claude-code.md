@@ -10,7 +10,7 @@
 |---|---|---|
 | 開發者 | SST（開源社群） | Anthropic |
 | 授權 | MIT | 商業 |
-| 版本 | v1.3.12 | 最新版 |
+| 版本 | v1.3.13 | 最新版 |
 | 安裝 | WinGet / npm / brew | npm |
 | 設定檔 | opencode.json + AGENTS.md | CLAUDE.md + settings.json |
 
@@ -46,7 +46,7 @@
 
 ## 品質比較（實測）
 
-| 維度 | OpenCode + Gemini 2.5 Pro | Claude Code + Opus |
+| 維度 | OpenCode + Gemini 3.1 Pro | Claude Code + Opus |
 |---|---|---|
 | 文件產生 | 優 | 優 |
 | Code Review | 良 | 優 |
@@ -62,7 +62,7 @@
 | | OpenCode | Claude Code |
 |---|---|---|
 | Ollama 本地 | 免費（需 GPU） | N/A |
-| Gemini 2.5 Pro | 免費額度 + 按量計費 | N/A |
+| Gemini 3.1 Pro | 免費額度 + 按量計費 | N/A |
 | Claude API | 可設定（需 API Key） | 訂閱制（$20/月 Pro） |
 | 總成本 | 低（本地免費 + Gemini 免費額度） | 中高 |
 

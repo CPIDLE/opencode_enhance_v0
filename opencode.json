@@ -54,11 +54,6 @@
     "windows-mcp": {
       "type": "local",
       "command": ["C:\\Users\\benth\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\Scripts\\uvx.exe", "windows-mcp"]
-    },
-    "google-workspace": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "google-workspace-mcp", "serve"]
     }
   }
 }
