@@ -52,13 +52,18 @@
   },
   "mcp": {
     "windows-mcp": {
+      "enabled": true,
       "type": "local",
       "command": ["C:\\Users\\benth\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\Scripts\\uvx.exe", "windows-mcp"]
     },
     "google-workspace": {
+      "enabled": true,
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "google-workspace-mcp", "serve"]
+      "args": ["-y", "google-workspace-mcp", "serve"],
+      "env": {
+        "GOOGLE_MCP_ACCOUNTS_PATH": "C:\\Users\\benth\\.google-mcp\\accounts.json"
+      }
     }
   }
 }
