@@ -91,7 +91,11 @@
   "mcp": {
     "windows-mcp": {
       "type": "local",
-      "command": ["uvx", "windows-mcp"]
+      "command": ["npx", "-y", "auralis-commander"]
+    },
+    "google-workspace": {
+      "type": "local",
+      "command": ["npx", "-y", "@dguido/google-workspace-mcp"]
     }
   }
 }
