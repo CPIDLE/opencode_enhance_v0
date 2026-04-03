@@ -123,3 +123,7 @@ Tool: OpenCode (Ollama local)
 - **禁止**修改 `progress.md`（Claude Code 進度追蹤檔）
 - OpenCode 自己的狀態請寫入 `.opencode/` 目錄
 - **禁止**呼叫 Google Chat Webhook 或 Apps Script（那是 Claude Code 的同步管道）
+
+## Google Workspace MCP
+
+- **主旨含中文必須用 Base64 編碼**：`<subject>` 改為 `=?UTF-8?B?<base64>?=`
